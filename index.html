@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    #carousel-container {
+      position: relative;
+      overflow: hidden;
+      width: auto;
+      margin: 0 auto;
+    }
+
+    #carousel {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+      position: relative;
+    }
+
+    .slide {
+      min-width: 100%;
+      position: relative;
+    }
+
+    .slide img {
+      width: 100%;
+      height: auto;
+    }
+
+    #prev, #next {
+      position: absolute;
+      top: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      color: white;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      border: none;
+      transform: translateY(-50%);
+    }
+
+    #prev { left: 0; }
+    #next { right: 0; }
+  </style>
+</head>
+<body>
+
+<div id="carousel-container">
+  <div id="carousel">
+    <div class="slide"><img src="cat1.png" alt="Image 1"></div>
+    <div class="slide"><img src="cat2.png" alt="Image 2"></div>
+    <div class="slide"><img src="cat3.png" alt="Image 3"></div>
+  </div>
+
+  <button id="prev">&#9665;</button>
+  <button id="next">&#9655;</button>
+</div>
+
+<script>
+  const carouselContainer = document.getElementById('carousel-container');
+  const carousel = document.getElementById('carousel');
+  const prevBtn = document.getElementById('prev');
+  const nextBtn = document.getElementById('next');
+  const slides = document.querySelectorAll('.slide');
+  let currentIndex = 0;
+
+  function adjustContainerSize() {
+    const maxWidth = Math.max(...Array.from(slides).map(slide => slide.clientWidth));
+    carouselContainer.style.width = maxWidth + 'px';
+
+    const currentSlide = slides[currentIndex];
+    const arrowRightPosition = carouselContainer.clientWidth - (nextBtn.clientWidth + 10);
+    nextBtn.style.left = arrowRightPosition + 'px';
+  }
+
+  function showSlide(index) {
+    carousel.style.transform = `translateX(${-index * 100}%)`;
+    adjustContainerSize();
+  }
+
+  function prevSlide() {
+    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+    showSlide(currentIndex);
+  }
+
+  function nextSlide() {
+    currentIndex = (currentIndex + 1) % slides.length;
+    showSlide(currentIndex);
+  }
+
+  prevBtn.addEventListener('click', prevSlide);
+  nextBtn.addEventListener('click', nextSlide);
+  
+  window.addEventListener('resize', adjustContainerSize);
+
+  window.addEventListener('load', () => {
+    adjustContainerSize();
+    showSlide(currentIndex);
+  });
+</script>
+
+</body>
+</html>
